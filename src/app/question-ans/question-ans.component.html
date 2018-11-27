@@ -22,6 +22,9 @@
 				            	<option *ngFor="let option of item.answers">{{ option }}</option>
 				            	
 				            </select>
+				            <div class="alert alert-danger" role="alert" *ngIf="answer?.errors && (answer.touched || answer.dirty)">
+				            	Invalid
+				           </div> 	
 				            
 				          </blockquote>
 				        </div>
