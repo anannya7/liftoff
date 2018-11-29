@@ -18,3 +18,11 @@
     width: 39vw;
     height: 99vh;
  }
+ .correct-chng{
+ 	font-size: 14px;
+    font-family: 'roboto';
+ }
+ img{
+ 	height: 100px;
+ 	width: 100px;
+ }

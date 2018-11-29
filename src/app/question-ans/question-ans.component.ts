@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-
+declare var $:any;
 @Component({
   selector: 'app-question-ans',
   templateUrl: './question-ans.component.html',
@@ -15,7 +15,7 @@ export class QuestionAnsComponent implements OnInit {
 		scales: {
         yAxes: [{
 	            ticks: {
-	                max: 3,
+	                max: 3.5,
 	                min: 0,
 	                stepSize: 0.5
 	            }
@@ -37,12 +37,10 @@ export class QuestionAnsComponent implements OnInit {
 
   // CHART COLOR.
   colors = [
-    { // 1st Year.
-      backgroundColor: 'rgba(77,83,96,0.2)'
+    { // Quiz Bar label.
+      backgroundColor: 'rgba(133,191,56,0.34)'
     },
-    { // 2nd Year.
-      backgroundColor: 'rgba(30, 169, 224, 0.8)'
-    }
+    
   ]
   
   // CHART CLICK EVENT.
@@ -60,41 +58,48 @@ export class QuestionAnsComponent implements OnInit {
   	this.question = [
 	   {
 
-	     correct_answer: 'front-end',
-	     question: 'Angular is a framework made for :',
-	     answers: ['front-end', 'back-end'],
+	     correct_answer: 'A directive is a custom HTML element that is used to extend the power of HTML.',
+	     question: 'Which of the following is correct about Angular 2 Directive?',
+	     answers: ['A directive is a custom HTML element that is used to extend the power of HTML', 'A directive can be used to import the functionality from other Angular JS modules','Both of the above','None of the above'],
 	     id: 0
 	   },
 	   {
-	     correct_answer: 'true',
-	     question: 'Angular is not the same as AngularJS : ',
-	     answers: ['true', 'false'],
+	     correct_answer: 'Both of the above.',
+	     question: 'Which of the following is correct about Angular 2 Routing ?',
+	     answers: ['Routing helps in directing users to different pages based on the option they choose on the main page.', 'Based on the option they choose, the required Angular Component will be rendered to the user','None of the above','Both of the above'],
 	     id: 1
 	   },
 	   {
-	    correct_answer: '@Output()',
-	     question: 'In Angular, you can pass data from child component to parent component using : ',
-	     answers: ['@Output()', '@Intput()'],
+	    correct_answer: 'This file contains the system files required for Angular JS application.',
+	     question: 'Which of the following is correct about systemjs.config.json?',
+	     answers: ['This file contains the system files required for Angular JS application.', 'This file is used to give the options about TypeScript used for the Angular JS project','This file contains information about Angular 2 project','All of the above'],
 	     id: 2
 	   },
 	   {
 	    correct_answer: 'Structural directive',
-	     question: 'A directive which modifies DOM hierarchy is called : ',
-	     answers: ['Structural directive', 'Attribute directive'],
+	     question: 'Which of the following filter is used to convert input to all uppercase?',
+	     answers: ['upper', 'uppercase','Both of the above.','None of the above.'],
 	     id: 3
 	   },
 	   {
-	    correct_answer: 'false',
-	     question: 'Custom pipe can modify actual value of variable apart from different presention in HTML: ',
-	     answers: ['true', 'false'],
+	    correct_answer: 'currency',
+	     question: 'Which of the following filter is used to convert an input string to currency format.',
+	     answers: ['amount', 'Both of the above.','currency','None of the above.'],
 	     id: 4
 	   },
 	   {
-	    correct_answer: 'true',
-	     question: 'Async Pipe subscribes to observer and update expression whenever there is data sent from observer: ',
-	     answers: ['true', 'false'],
-	     id: 4
+	    correct_answer: 'Angular 2 Module is used to break up the application into logical pieces of code.',
+	     question: 'Which of the following is true?',
+	     answers: ['Angular 2 Service is used to break up the application into logical pieces of code.', 'Angular 2 Template is used to break up the application into logical pieces of code.','None of the above.','Angular 2 Module is used to break up the application into logical pieces of code.'],
+	     id: 5
 	   },
+	   {
+	     correct_answer: 'Angular 2 Component can be used to bring the modules together.',
+	     question: 'Which of the following is true?',
+	     answers: ['Angular 2 Template can be used to bring the modules together.', 'Angular 2 Service can be used to bring the modules together.','Angular 2 Component can be used to bring the modules together.','None of the above.'],
+	     id: 6
+	   }
+
 
 	 ]; 
 
@@ -118,29 +123,36 @@ export class QuestionAnsComponent implements OnInit {
 
   // Method for submit quiz
   onSubmitQuiz(){
-  	var total = this.question.length * 0.5;
-  	for(var i=0;i< this.question.length;i++){
-  		if(this.answerList[i].id == this.question[i].id ){
-  			if(this.answerList[i].ans == this.question[i].correct_answer){
-  				this.correct_ans_count += 0.5;
+  	if(this.answerList.length != this.question.length){
+  		alert("Please Give All The Answers Before Submit");
 
-  			}
-
-  		}
 
   	}
-  	this.incorrect_ans_count =  total - this.correct_ans_count;
-  	this.callChartJs();
-  	debugger
+  	else{
 
 
+	  	var total = this.question.length * 0.5;
+	  	for(var i=0;i< this.question.length;i++){
+	  		if(this.answerList[i].id == this.question[i].id ){
+	  			if(this.answerList[i].ans == this.question[i].correct_answer){
+	  				this.correct_ans_count += 0.5;
 
+	  			}
 
+	  		}
+
+	  	}
+		
+		$(".correct-chng").removeClass("d-none");
+		this.answerList = [];  	
+	  	this.incorrect_ans_count =  total - this.correct_ans_count;
+	  	this.callChartJs();
+	}
   }
   callChartJs(){
   	this.chartData = [
     {
-      label: '1st Year',
+      label: 'Quiz Result',
       data: [this.correct_ans_count,this.incorrect_ans_count] 
     }
     
@@ -151,6 +163,7 @@ export class QuestionAnsComponent implements OnInit {
   }
   clearForm(){
   	this.answerList = [];
+  	$(".correct-chng").addClass("d-none"); 
   	this.quizForm.reset();
   	this.quizForm.reset({
 	  answer: ""
